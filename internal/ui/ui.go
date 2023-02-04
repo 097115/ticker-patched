@@ -105,12 +105,23 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:ireturn,cyclo
 
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "tab":
+		case "tab", "k":
 
 			m.groupSelectedIndex++
 
 			if m.groupSelectedIndex > m.groupMaxIndex {
 				m.groupSelectedIndex = 0
+			}
+
+			m.groupSelectedName = m.ctx.Groups[m.groupSelectedIndex].Name
+
+			return m, generateQuoteMsg(m, true)
+		case "shift+tab", "j":
+
+			m.groupSelectedIndex--
+
+			if m.groupSelectedIndex < 0 {
+				m.groupSelectedIndex = m.groupMaxIndex
 			}
 
 			m.groupSelectedName = m.ctx.Groups[m.groupSelectedIndex].Name
@@ -127,7 +138,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:ireturn,cyclo
 	case tea.WindowSizeMsg:
 		m.watchlist.Width = msg.Width
 		m.summary.Width = msg.Width
-		viewportHeight := msg.Height - m.headerHeight - footerHeight
+		viewportHeight := msg.Height - m.headerHeight
 
 		if !m.ready {
 			m.viewport = viewport.Model{Width: msg.Width, Height: viewportHeight}
@@ -177,8 +188,7 @@ func (m Model) View() string {
 	}
 
 	return viewSummary +
-		m.viewport.View() + "\n" +
-		footer(m.viewport.Width, m.lastUpdateTime, m.groupSelectedName)
+		m.viewport.View()
 
 }
 
@@ -199,7 +209,7 @@ func footer(width int, time string, groupSelectedName string) string {
 				Cells: []grid.Cell{
 					{Text: styleLogo(" ticker "), Width: 8},
 					{Text: styleGroup(" " + groupSelectedName + " "), Width: len(groupSelectedName) + 2, VisibleMinWidth: 95},
-					{Text: styleHelp(" q: exit ↑: scroll up ↓: scroll down ⭾: change group"), Width: 52},
+					{Text: styleHelp(" q: exit ↑: scroll up ↓: scroll down ⭾ : next group ⇧+⭾: previous group"), Width: 71},
 					{Text: styleHelp("↻  " + time), Align: grid.Right},
 				},
 			},
