@@ -16,8 +16,8 @@ const (
 //nolint:gochecknoglobals
 var (
 	p                  = te.ColorProfile()
-	stylePricePositive = newStyleFromGradient("#C6FF40", "#779929")
-	stylePriceNegative = newStyleFromGradient("#FF7940", "#994926")
+	stylePricePositive = newStyleFromGradient("#779929", "#C6FF40")
+	stylePriceNegative = newStyleFromGradient("#994926", "#FF7940")
 )
 
 // NewStyle creates a new predefined style function
@@ -47,7 +47,7 @@ func stylePrice(percent float64, text string) string { //nolint:cyclop
 	}
 
 	if percent > 10.0 {
-		return out.Foreground(p.Color("70")).String()
+		return out.Foreground(p.Color("82")).String()
 	}
 
 	if percent > 5 {
@@ -55,18 +55,18 @@ func stylePrice(percent float64, text string) string { //nolint:cyclop
 	}
 
 	if percent > 0.0 {
-		return out.Foreground(p.Color("82")).String()
+		return out.Foreground(p.Color("70")).String()
 	}
 
 	if percent < -10.0 {
-		return out.Foreground(p.Color("124")).String()
+		return out.Foreground(p.Color("196")).String()
 	}
 
 	if percent < -5.0 {
 		return out.Foreground(p.Color("160")).String()
 	}
 
-	return out.Foreground(p.Color("196")).String()
+	return out.Foreground(p.Color("124")).String()
 
 }
 
