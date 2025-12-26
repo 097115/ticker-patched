@@ -126,11 +126,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 
-		case "tab", "shift+tab":
+		case "tab", "shift+tab", "k", "j":
 			m.mu.Lock()
 
 			groupSelectedCursor := -1
-			if msg.String() == "tab" {
+			if msg.String() == "tab" || msg.String() == "k" {
 				groupSelectedCursor = 1
 			}
 
@@ -178,7 +178,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.mu.Lock()
 		defer m.mu.Unlock()
 
-		viewportHeight := msg.Height - m.headerHeight - footerHeight
+		viewportHeight := msg.Height - m.headerHeight
 
 		if !m.ready {
 			m.viewport = viewport.New(msg.Width, viewportHeight)
@@ -321,8 +321,7 @@ func (m *Model) View() string {
 	}
 
 	return viewSummary +
-		m.viewport.View() + "\n" +
-		footer(m.viewport.Width, m.lastUpdateTime, m.groupSelectedName)
+		m.viewport.View()
 
 }
 
@@ -342,7 +341,7 @@ func footer(width int, time string, groupSelectedName string) string {
 				Width: width,
 				Cells: []grid.Cell{
 					{Text: styleLogo(" ticker "), Width: 8},
-					{Text: styleGroup(" " + groupSelectedName + " "), Width: len(groupSelectedName) + 2, VisibleMinWidth: 95},
+					{Text: styleHelp(" q: exit ↑: scroll up ↓: scroll down ⭾ : next group ⇧+⭾: previous group"), Width: 71},
 					{Text: styleHelp(" q: exit ↑: scroll up ↓: scroll down ⭾: change group"), Width: 52},
 					{Text: styleHelp("↻  " + time), Align: grid.Right},
 				},
