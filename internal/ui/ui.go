@@ -145,11 +145,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:maintidx
 	case tea.KeyMsg:
 		switch msg.String() {
 
-		case "tab", "shift+tab":
+		case "tab", "shift+tab", "k", "j":
 			m.mu.Lock()
 
 			groupSelectedCursor := -1
-			if msg.String() == "tab" {
+			if msg.String() == "tab" || msg.String() == "k" {
 				groupSelectedCursor = 1
 			}
 
@@ -221,7 +221,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:maintidx
 		m.mu.Lock()
 		defer m.mu.Unlock()
 
-		viewportHeight := msg.Height - m.headerHeight - footerHeight
+		viewportHeight := msg.Height - m.headerHeight
 
 		if !m.ready {
 			m.viewport = viewport.New(msg.Width, viewportHeight)
@@ -377,8 +377,7 @@ func (m *Model) View() string {
 	}
 
 	return viewSummary +
-		m.viewport.View() + "\n" +
-		footer(m.viewport.Width, m.lastUpdateTime, m.groupSelectedName, m.currentSort, m.latestVersion)
+		m.viewport.View()
 
 }
 
