@@ -33,7 +33,7 @@ jobs:
             target_os: linux
     steps:
       - name: Set up access
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
