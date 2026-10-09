@@ -54,7 +54,7 @@ jobs:
           ls -la
           tar czvf ticker-${{ matrix.artifact_suffix }}.tar.gz ticker-${{ matrix.artifact_suffix }}
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: ticker-${{ matrix.artifact_suffix }}.tar.gz
         env:
